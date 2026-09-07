@@ -1,0 +1,77 @@
+{
+    "title": "SECOP II input",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "keywords": {
+            "title": "Keywords",
+            "type": "string",
+            "description": "Full-text search across the process name/description/entity (SoQL $q). Leave empty to browse by the filters below instead, or to pull the most recently published processes.",
+            "editor": "textfield",
+            "prefill": "interventoria vial"
+        },
+        "entidad": {
+            "title": "Entity name contains",
+            "type": "string",
+            "description": "Case-insensitive partial match on the contracting entity's name (e.g. \"alcaldia\", \"ministerio de salud\").",
+            "editor": "textfield"
+        },
+        "departamento": {
+            "title": "Department",
+            "type": "string",
+            "description": "Exact department name as SECOP records it (e.g. \"Antioquia\", \"Distrito Capital de Bogotá\").",
+            "editor": "textfield"
+        },
+        "estadoResumen": {
+            "title": "Process status",
+            "type": "string",
+            "description": "Exact status as SECOP records it (e.g. \"Presentación de oferta\", \"Adjudicado\", \"Convocado\"). Leave empty for any status.",
+            "editor": "textfield"
+        },
+        "fechaDesde": {
+            "title": "Published from",
+            "type": "string",
+            "description": "Only processes published on or after this date (YYYY-MM-DD). Filters on \"fecha_de_publicacion_del\".",
+            "editor": "datepicker"
+        },
+        "fechaHasta": {
+            "title": "Published until",
+            "type": "string",
+            "description": "Only processes published on or before this date (YYYY-MM-DD).",
+            "editor": "datepicker"
+        },
+        "maxItems": {
+            "title": "Max records",
+            "type": "integer",
+            "description": "Stop after this many records. The dataset has ~9 million rows, so an unfiltered pull with a huge value will take a long time and produce a huge dataset - filter first.",
+            "default": 1000,
+            "minimum": 1,
+            "maximum": 1000000,
+            "unit": "records"
+        },
+        "whereClause": {
+            "title": "Advanced: raw SoQL $where",
+            "type": "string",
+            "description": "For power users: a raw Socrata SoQL $where clause, combined with the filters above using AND. See the dataset's column list at datos.gov.co for field names. Leave empty unless you need something the filters above don't cover.",
+            "editor": "textarea",
+            "sectionCaption": "Advanced",
+            "sectionDescription": "Only touch these if the filters above aren't enough."
+        },
+        "pageSize": {
+            "title": "Page size",
+            "type": "integer",
+            "description": "Records per API request. Larger pages mean fewer requests but bigger responses held in memory at once.",
+            "default": 1000,
+            "minimum": 100,
+            "maximum": 50000
+        },
+        "appToken": {
+            "title": "Socrata app token (optional)",
+            "type": "string",
+            "description": "Free token from a datos.gov.co account (Sign in -> Edit Profile -> Developer Settings -> Create New App Token). Not required, but raises your rate limit if you run this often. Not a login/cookie - just an API usage token.",
+            "editor": "textfield",
+            "isSecret": true
+        }
+    },
+    "required": []
+}

@@ -1,0 +1,23 @@
+{
+    "actorSpecification": 1,
+    "fields": {},
+    "views": {
+        "overview": {
+            "title": "Overview",
+            "transformation": {
+                "fields": ["entidad", "nombreDelProcedimiento", "fase", "precioBase", "fechaDePublicacionDel", "urlProceso"]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "entidad": { "label": "Entity" },
+                    "nombreDelProcedimiento": { "label": "Process name" },
+                    "fase": { "label": "Phase" },
+                    "precioBase": { "label": "Base price", "format": "number" },
+                    "fechaDePublicacionDel": { "label": "Published", "format": "date" },
+                    "urlProceso": { "label": "Link", "format": "link" }
+                }
+            }
+        }
+    }
+}
