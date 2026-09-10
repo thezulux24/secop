@@ -85,7 +85,7 @@ async def main() -> None:
         aborted = False
 
         try:
-            await Actor.set_status_message('Querying SECOP II...')
+            await Actor.set_status_message('Consultando SECOP II...')
 
             while state['run_index'] < len(runs) and budget_left() > 0:
                 term = runs[state['run_index']]
@@ -103,7 +103,7 @@ async def main() -> None:
                         rows = await client.fetch_page(params)
                     except Exception:  # noqa: BLE001 - a bad page must stop the run cleanly, not crash it
                         Actor.log.exception(
-                            'Page fetch failed at offset=%s (term=%s)', state['offset'], label
+                            'Fallo al consultar la página en offset=%s (término=%s)', state['offset'], label
                         )
                         stats['page_failed'] += 1
                         aborted = True
@@ -111,7 +111,7 @@ async def main() -> None:
 
                     if not rows:
                         Actor.log.info(
-                            'No more rows at offset=%s (term=%s) - query exhausted.',
+                            'No hay más filas en offset=%s (término=%s) - consulta agotada.',
                             state['offset'], label,
                         )
                         break
@@ -132,7 +132,7 @@ async def main() -> None:
                             state['counts'][label] = state['counts'].get(label, 0) + 1
                         except ValidationError as exc:
                             stats['invalid'] += 1
-                            Actor.log.warning('Invalid row: %s', exc.errors()[:2])
+                            Actor.log.warning('Fila inválida: %s', exc.errors()[:2])
                             invalid = await Actor.open_dataset(name='INVALID')
                             await invalid.push_data({'raw': row, 'errors': str(exc.errors()[:3])})
 
@@ -142,8 +142,8 @@ async def main() -> None:
                     if len(buffer) >= PUSH_BATCH:
                         await flush()
                         await Actor.set_status_message(
-                            f'"{label}": {state["counts"].get(label, 0)} found - '
-                            f'{state["pushed"]} total...'
+                            f'"{label}": {state["counts"].get(label, 0)} encontrados - '
+                            f'{state["pushed"]} en total...'
                         )
 
                     if page_len < int(params['$limit']):
@@ -162,13 +162,13 @@ async def main() -> None:
 
         if state['pushed'] == 0 and stats['page_failed']:
             await Actor.fail(
-                status_message='Could not reach the SECOP II API. It may be temporarily '
-                'down - check https://www.datos.gov.co and try again.'
+                status_message='No se pudo conectar con la API de SECOP II. Puede estar '
+                'caída temporalmente - revisa https://www.datos.gov.co e inténtalo de nuevo.'
             )
             return
 
         Actor.log.info(
-            'Done. records=%s by_keyword=%s stats=%s', state['pushed'], state['counts'], dict(stats)
+            'Listo. registros=%s por_termino=%s stats=%s', state['pushed'], state['counts'], dict(stats)
         )
         await Actor.set_value(
             'RUN_SUMMARY', {'records': state['pushed'], 'byKeyword': state['counts'], **stats}
