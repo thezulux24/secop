@@ -1,74 +1,113 @@
 {
-    "title": "SECOP II input",
+    "title": "Entrada de SECOP II",
     "type": "object",
     "schemaVersion": 1,
     "properties": {
         "keywords": {
-            "title": "Keywords",
-            "type": "string",
-            "description": "Full-text search across the process name/description/entity (SoQL $q). Leave empty to browse by the filters below instead, or to pull the most recently published processes.",
-            "editor": "textfield",
-            "prefill": "interventoria vial"
+            "title": "Palabras clave (una o varias)",
+            "type": "array",
+            "description": "Búsqueda de texto completo sobre el nombre/descripción/entidad del proceso (SoQL $q). Agrega varios términos para buscarlos uno por uno: cada término se consulta por separado, cada registro queda marcado con el término que lo encontró, y al final de la corrida se reporta la cantidad de resultados por cada término. Déjalo vacío para navegar solo con los filtros de abajo, o para traer los procesos publicados más recientemente.",
+            "editor": "stringList",
+            "prefill": ["interventoria vial"]
         },
         "entidad": {
-            "title": "Entity name contains",
+            "title": "La entidad contiene",
             "type": "string",
-            "description": "Case-insensitive partial match on the contracting entity's name (e.g. \"alcaldia\", \"ministerio de salud\").",
+            "description": "Coincidencia parcial, sin distinguir mayúsculas, sobre el nombre de la entidad contratante (ej. \"alcaldia\", \"ministerio de salud\").",
             "editor": "textfield"
         },
         "departamento": {
-            "title": "Department",
+            "title": "Departamento",
             "type": "string",
-            "description": "Exact department name as SECOP records it (e.g. \"Antioquia\", \"Distrito Capital de Bogotá\").",
+            "description": "Nombre exacto del departamento tal como lo registra SECOP (ej. \"Antioquia\", \"Distrito Capital de Bogotá\").",
             "editor": "textfield"
         },
         "estadoResumen": {
-            "title": "Process status",
+            "title": "Estado del proceso",
             "type": "string",
-            "description": "Exact status as SECOP records it (e.g. \"Presentación de oferta\", \"Adjudicado\", \"Convocado\"). Leave empty for any status.",
-            "editor": "textfield"
+            "description": "Estado exacto tal como lo registra SECOP. Elige entre los valores reales encontrados en el dataset (conteos verificados el 2026-09-10).",
+            "editor": "select",
+            "enum": [
+                "",
+                "Presentación de oferta",
+                "Fase de ofertas",
+                "Adjudicado",
+                "Presentación de observaciones",
+                "No Definido",
+                "Manifestación de interés (Menor Cuantía)",
+                "Clarification submission",
+                "Estimate Phase",
+                "Pré-Calificación de competidores",
+                "Fase de Selección (Presentación de ofertas)",
+                "Selección de ofertas (borrador)",
+                "Proceso de ofertas",
+                "Presentación de Observaciones",
+                "Fase de Concurso",
+                "Presentación de observaciones (precalificación)",
+                "Presentación de oferta (precalificación)"
+            ],
+            "enumTitles": [
+                "Cualquier estado",
+                "Presentación de oferta (7.18M)",
+                "Fase de ofertas (823.7K)",
+                "Adjudicado (796.9K)",
+                "Presentación de observaciones (157.1K)",
+                "No Definido (93.4K)",
+                "Manifestación de interés (Menor Cuantía) (65.2K)",
+                "Clarification submission (9.8K)",
+                "Estimate Phase (8.1K)",
+                "Pré-Calificación de competidores (3.8K)",
+                "Fase de Selección (Presentación de ofertas) (2.9K)",
+                "Selección de ofertas (borrador) (1.9K)",
+                "Proceso de ofertas (1.2K)",
+                "Presentación de Observaciones - variante con mayúscula (103)",
+                "Fase de Concurso (52)",
+                "Presentación de observaciones (precalificación) (13)",
+                "Presentación de oferta (precalificación) (11)"
+            ],
+            "default": ""
         },
         "fechaDesde": {
-            "title": "Published from",
+            "title": "Publicado desde",
             "type": "string",
-            "description": "Only processes published on or after this date (YYYY-MM-DD). Filters on \"fecha_de_publicacion_del\".",
+            "description": "Solo procesos publicados en esta fecha o después (AAAA-MM-DD). Filtra sobre \"fecha_de_publicacion_del\".",
             "editor": "datepicker"
         },
         "fechaHasta": {
-            "title": "Published until",
+            "title": "Publicado hasta",
             "type": "string",
-            "description": "Only processes published on or before this date (YYYY-MM-DD).",
+            "description": "Solo procesos publicados en esta fecha o antes (AAAA-MM-DD).",
             "editor": "datepicker"
         },
         "maxItems": {
-            "title": "Max records",
+            "title": "Máximo de registros",
             "type": "integer",
-            "description": "Stop after this many records. The dataset has ~9 million rows, so an unfiltered pull with a huge value will take a long time and produce a huge dataset - filter first.",
+            "description": "Detiene la corrida al llegar a esta cantidad de registros. El dataset tiene ~9 millones de filas, así que una consulta sin filtrar con un valor muy alto tomará mucho tiempo y generará un dataset enorme - filtra primero.",
             "default": 1000,
             "minimum": 1,
             "maximum": 1000000,
-            "unit": "records"
+            "unit": "registros"
         },
         "whereClause": {
-            "title": "Advanced: raw SoQL $where",
+            "title": "Avanzado: cláusula SoQL $where en crudo",
             "type": "string",
-            "description": "For power users: a raw Socrata SoQL $where clause, combined with the filters above using AND. See the dataset's column list at datos.gov.co for field names. Leave empty unless you need something the filters above don't cover.",
+            "description": "Para usuarios avanzados: una cláusula SoQL $where de Socrata en crudo, combinada con los filtros de arriba usando AND. Consulta la lista de columnas del dataset en datos.gov.co para conocer los nombres de los campos. Déjalo vacío a menos que necesites algo que los filtros de arriba no cubran.",
             "editor": "textarea",
-            "sectionCaption": "Advanced",
-            "sectionDescription": "Only touch these if the filters above aren't enough."
+            "sectionCaption": "Avanzado",
+            "sectionDescription": "Toca esto solo si los filtros de arriba no son suficientes."
         },
         "pageSize": {
-            "title": "Page size",
+            "title": "Tamaño de página",
             "type": "integer",
-            "description": "Records per API request. Larger pages mean fewer requests but bigger responses held in memory at once.",
+            "description": "Registros por solicitud a la API. Páginas más grandes significan menos solicitudes, pero respuestas más grandes en memoria a la vez.",
             "default": 1000,
             "minimum": 100,
             "maximum": 50000
         },
         "appToken": {
-            "title": "Socrata app token (optional)",
+            "title": "Token de aplicación de Socrata (opcional)",
             "type": "string",
-            "description": "Free token from a datos.gov.co account (Sign in -> Edit Profile -> Developer Settings -> Create New App Token). Not required, but raises your rate limit if you run this often. Not a login/cookie - just an API usage token.",
+            "description": "Token gratuito de una cuenta de datos.gov.co (Inicia sesión -> Editar perfil -> Configuración de desarrollador -> Crear nuevo token de aplicación). No es obligatorio, pero aumenta tu límite de solicitudes si corres este Actor con frecuencia. No es un login ni una cookie - es solo un token de uso de la API.",
             "editor": "textfield",
             "isSecret": true
         }

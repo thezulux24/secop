@@ -3,19 +3,19 @@
     "fields": {},
     "views": {
         "overview": {
-            "title": "Overview",
+            "title": "Resumen",
             "transformation": {
                 "fields": ["entidad", "nombreDelProcedimiento", "fase", "precioBase", "fechaDePublicacionDel", "urlProceso"]
             },
             "display": {
                 "component": "table",
                 "properties": {
-                    "entidad": { "label": "Entity" },
-                    "nombreDelProcedimiento": { "label": "Process name" },
-                    "fase": { "label": "Phase" },
-                    "precioBase": { "label": "Base price", "format": "number" },
-                    "fechaDePublicacionDel": { "label": "Published", "format": "date" },
-                    "urlProceso": { "label": "Link", "format": "link" }
+                    "entidad": { "label": "Entidad" },
+                    "nombreDelProcedimiento": { "label": "Nombre del proceso" },
+                    "fase": { "label": "Fase" },
+                    "precioBase": { "label": "Precio base", "format": "number" },
+                    "fechaDePublicacionDel": { "label": "Publicado", "format": "date" },
+                    "urlProceso": { "label": "Enlace", "format": "link" }
                 }
             }
         }
