@@ -18,11 +18,27 @@ from .models import Process
 PUSH_BATCH = 500
 
 
+def _keyword_terms(raw: object) -> list[str]:
+    """Normalize the `keywords` input into a deduped list of non-empty terms.
+
+    Accepts the new list-of-strings shape as well as a bare string (older saved inputs,
+    or a user typing one term directly), so existing input JSON keeps working.
+    """
+    if isinstance(raw, str):
+        raw = [raw]
+    terms: list[str] = []
+    for item in raw or []:
+        term = (item or '').strip() if isinstance(item, str) else ''
+        if term and term not in terms:
+            terms.append(term)
+    return terms
+
+
 async def main() -> None:
     async with Actor:
         actor_input = await Actor.get_input() or {}
 
-        keywords = (actor_input.get('keywords') or '').strip() or None
+        terms = _keyword_terms(actor_input.get('keywords'))
         where = soda.build_where(
             entidad=(actor_input.get('entidad') or '').strip() or None,
             departamento=(actor_input.get('departamento') or '').strip() or None,
@@ -33,10 +49,17 @@ async def main() -> None:
         )
 
         max_items = int(actor_input.get('maxItems') or 1000)
-        page_size = min(int(actor_input.get('pageSize') or soda.DEFAULT_PAGE_SIZE), max_items)
+        page_size = int(actor_input.get('pageSize') or soda.DEFAULT_PAGE_SIZE)
         app_token = actor_input.get('appToken') or None
 
-        state = await Actor.use_state(default_value={'offset': 0, 'pushed': 0})
+        # One search run per keyword term, each tagged and counted on its own, so "which
+        # term found what" is visible in the output and in RUN_SUMMARY. No terms at all
+        # means a single untagged run (browse by the other filters, or most recent first).
+        runs: list[str | None] = terms if terms else [None]
+
+        state = await Actor.use_state(
+            default_value={'run_index': 0, 'offset': 0, 'pushed': 0, 'counts': {}}
+        )
         stats: Counter = Counter()
 
         client = SodaClient(app_token=app_token, logger=Actor.log)
@@ -45,7 +68,9 @@ async def main() -> None:
         # apparently, some genuine re-published duplicates in the source itself) can hand
         # back the same process more than once across adjacent pages. Dedup defensively
         # by id_del_proceso regardless of the exact cause - confirmed live: without this,
-        # a 3000-row pull over a live query contained >100 exact-duplicate rows.
+        # a 3000-row pull over a live query contained >100 exact-duplicate rows. This dedup
+        # is global across terms too, so a process matching two search terms is only pushed
+        # once (tagged with whichever term surfaced it first).
         seen_process_ids: set[str] = set()
 
         async def flush() -> None:
@@ -54,58 +79,80 @@ async def main() -> None:
                 state['pushed'] += len(buffer)
                 buffer.clear()
 
+        def budget_left() -> int:
+            return max_items - (state['pushed'] + len(buffer))
+
+        aborted = False
+
         try:
-            offset = state['offset']
             await Actor.set_status_message('Querying SECOP II...')
 
-            while state['pushed'] + len(buffer) < max_items:
-                remaining = max_items - (state['pushed'] + len(buffer))
-                params = soda.build_params(
-                    keywords=keywords,
-                    where=where,
-                    limit=min(page_size, remaining),
-                    offset=offset,
-                )
+            while state['run_index'] < len(runs) and budget_left() > 0:
+                term = runs[state['run_index']]
+                label = term or '(no keyword)'
 
-                try:
-                    rows = await client.fetch_page(params)
-                except Exception:  # noqa: BLE001 - a bad page must stop the run cleanly, not crash it
-                    Actor.log.exception('Page fetch failed at offset=%s', offset)
-                    stats['page_failed'] += 1
-                    break
-
-                if not rows:
-                    Actor.log.info('No more rows at offset=%s - query exhausted.', offset)
-                    break
-
-                for row in rows:
-                    process_id = row.get('id_del_proceso')
-                    if process_id and process_id in seen_process_ids:
-                        stats['duplicate'] += 1
-                        continue
-                    if process_id:
-                        seen_process_ids.add(process_id)
+                while budget_left() > 0:
+                    params = soda.build_params(
+                        keywords=term,
+                        where=where,
+                        limit=min(page_size, budget_left()),
+                        offset=state['offset'],
+                    )
 
                     try:
-                        buffer.append(
-                            Process.from_soda_row(row, search_keywords=keywords).to_dataset()
+                        rows = await client.fetch_page(params)
+                    except Exception:  # noqa: BLE001 - a bad page must stop the run cleanly, not crash it
+                        Actor.log.exception(
+                            'Page fetch failed at offset=%s (term=%s)', state['offset'], label
                         )
-                        stats['ok'] += 1
-                    except ValidationError as exc:
-                        stats['invalid'] += 1
-                        Actor.log.warning('Invalid row: %s', exc.errors()[:2])
-                        invalid = await Actor.open_dataset(name='INVALID')
-                        await invalid.push_data({'raw': row, 'errors': str(exc.errors()[:3])})
+                        stats['page_failed'] += 1
+                        aborted = True
+                        break
 
-                offset += len(rows)
-                state['offset'] = offset
+                    if not rows:
+                        Actor.log.info(
+                            'No more rows at offset=%s (term=%s) - query exhausted.',
+                            state['offset'], label,
+                        )
+                        break
 
-                if len(buffer) >= PUSH_BATCH:
-                    await flush()
-                    await Actor.set_status_message(f'{state["pushed"]} records fetched...')
+                    for row in rows:
+                        process_id = row.get('id_del_proceso')
+                        if process_id and process_id in seen_process_ids:
+                            stats['duplicate'] += 1
+                            continue
+                        if process_id:
+                            seen_process_ids.add(process_id)
 
-                if len(rows) < int(params['$limit']):
-                    # A short page means the query is exhausted - no point requesting more.
+                        try:
+                            buffer.append(
+                                Process.from_soda_row(row, search_keywords=term).to_dataset()
+                            )
+                            stats['ok'] += 1
+                            state['counts'][label] = state['counts'].get(label, 0) + 1
+                        except ValidationError as exc:
+                            stats['invalid'] += 1
+                            Actor.log.warning('Invalid row: %s', exc.errors()[:2])
+                            invalid = await Actor.open_dataset(name='INVALID')
+                            await invalid.push_data({'raw': row, 'errors': str(exc.errors()[:3])})
+
+                    page_len = len(rows)
+                    state['offset'] += page_len
+
+                    if len(buffer) >= PUSH_BATCH:
+                        await flush()
+                        await Actor.set_status_message(
+                            f'"{label}": {state["counts"].get(label, 0)} found - '
+                            f'{state["pushed"]} total...'
+                        )
+
+                    if page_len < int(params['$limit']):
+                        # A short page means this term's query is exhausted.
+                        break
+
+                state['run_index'] += 1
+                state['offset'] = 0
+                if aborted:
                     break
 
             await flush()
@@ -120,5 +167,9 @@ async def main() -> None:
             )
             return
 
-        Actor.log.info('Done. records=%s stats=%s', state['pushed'], dict(stats))
-        await Actor.set_value('RUN_SUMMARY', {'records': state['pushed'], **stats})
+        Actor.log.info(
+            'Done. records=%s by_keyword=%s stats=%s', state['pushed'], state['counts'], dict(stats)
+        )
+        await Actor.set_value(
+            'RUN_SUMMARY', {'records': state['pushed'], 'byKeyword': state['counts'], **stats}
+        )

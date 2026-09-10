@@ -4,11 +4,11 @@
     "schemaVersion": 1,
     "properties": {
         "keywords": {
-            "title": "Keywords",
-            "type": "string",
-            "description": "Full-text search across the process name/description/entity (SoQL $q). Leave empty to browse by the filters below instead, or to pull the most recently published processes.",
-            "editor": "textfield",
-            "prefill": "interventoria vial"
+            "title": "Keywords (one or more)",
+            "type": "array",
+            "description": "Full-text search across the process name/description/entity (SoQL $q). Add several terms to search them one by one: each term is queried separately, every record is tagged with the term that matched it, and the run reports a result count per term. Leave empty to browse by the filters below instead, or to pull the most recently published processes.",
+            "editor": "stringList",
+            "prefill": ["interventoria vial"]
         },
         "entidad": {
             "title": "Entity name contains",
@@ -25,8 +25,47 @@
         "estadoResumen": {
             "title": "Process status",
             "type": "string",
-            "description": "Exact status as SECOP records it (e.g. \"Presentación de oferta\", \"Adjudicado\", \"Convocado\"). Leave empty for any status.",
-            "editor": "textfield"
+            "description": "Exact status as SECOP records it. Pick from the live values found in the dataset (counts as of 2026-09-10).",
+            "editor": "select",
+            "enum": [
+                "",
+                "Presentación de oferta",
+                "Fase de ofertas",
+                "Adjudicado",
+                "Presentación de observaciones",
+                "No Definido",
+                "Manifestación de interés (Menor Cuantía)",
+                "Clarification submission",
+                "Estimate Phase",
+                "Pré-Calificación de competidores",
+                "Fase de Selección (Presentación de ofertas)",
+                "Selección de ofertas (borrador)",
+                "Proceso de ofertas",
+                "Presentación de Observaciones",
+                "Fase de Concurso",
+                "Presentación de observaciones (precalificación)",
+                "Presentación de oferta (precalificación)"
+            ],
+            "enumTitles": [
+                "Any status",
+                "Presentación de oferta (7.18M)",
+                "Fase de ofertas (823.7K)",
+                "Adjudicado (796.9K)",
+                "Presentación de observaciones (157.1K)",
+                "No Definido (93.4K)",
+                "Manifestación de interés (Menor Cuantía) (65.2K)",
+                "Clarification submission (9.8K)",
+                "Estimate Phase (8.1K)",
+                "Pré-Calificación de competidores (3.8K)",
+                "Fase de Selección (Presentación de ofertas) (2.9K)",
+                "Selección de ofertas (borrador) (1.9K)",
+                "Proceso de ofertas (1.2K)",
+                "Presentación de Observaciones - capitalized variant (103)",
+                "Fase de Concurso (52)",
+                "Presentación de observaciones (precalificación) (13)",
+                "Presentación de oferta (precalificación) (11)"
+            ],
+            "default": ""
         },
         "fechaDesde": {
             "title": "Published from",
