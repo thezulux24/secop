@@ -1,0 +1,12 @@
+{
+    "actorOutputSchemaVersion": 1,
+    "title": "SECOP II - Procesos de Contratación Pública",
+    "properties": {
+        "processes": {
+            "type": "string",
+            "title": "Dataset de Procesos de SECOP II",
+            "description": "Dataset estructurado con los procesos de contratación pública de Colombia extraídos de SECOP II.",
+            "template": "{{links.apiDefaultDatasetUrl}}/items"
+        }
+    }
+}

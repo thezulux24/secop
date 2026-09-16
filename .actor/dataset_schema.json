@@ -3,19 +3,174 @@
     "fields": {},
     "views": {
         "overview": {
-            "title": "Resumen",
+            "title": "Resumen General",
             "transformation": {
-                "fields": ["entidad", "nombreDelProcedimiento", "fase", "precioBase", "fechaDePublicacionDel", "urlProceso"]
+                "fields": [
+                    "entidad",
+                    "nombreDelProcedimiento",
+                    "fase",
+                    "estadoResumen",
+                    "precioBase",
+                    "fechaDePublicacionDel",
+                    "urlProceso"
+                ]
             },
             "display": {
                 "component": "table",
                 "properties": {
-                    "entidad": { "label": "Entidad" },
-                    "nombreDelProcedimiento": { "label": "Nombre del proceso" },
-                    "fase": { "label": "Fase" },
-                    "precioBase": { "label": "Precio base", "format": "number" },
-                    "fechaDePublicacionDel": { "label": "Publicado", "format": "date" },
-                    "urlProceso": { "label": "Enlace", "format": "link" }
+                    "entidad": {
+                        "label": "Entidad"
+                    },
+                    "nombreDelProcedimiento": {
+                        "label": "Objeto / Proceso"
+                    },
+                    "fase": {
+                        "label": "Fase"
+                    },
+                    "estadoResumen": {
+                        "label": "Estado"
+                    },
+                    "precioBase": {
+                        "label": "Presupuesto base",
+                        "format": "number"
+                    },
+                    "fechaDePublicacionDel": {
+                        "label": "Publicado",
+                        "format": "date"
+                    },
+                    "urlProceso": {
+                        "label": "Enlace SECOP",
+                        "format": "link"
+                    }
+                }
+            }
+        },
+        "adjudicacion": {
+            "title": "Adjudicación y Proveedores",
+            "transformation": {
+                "fields": [
+                    "entidad",
+                    "nombreDelProcedimiento",
+                    "adjudicado",
+                    "valorTotalAdjudicacion",
+                    "nombreDelProveedor",
+                    "nitDelProveedorAdjudicado",
+                    "urlProceso"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "entidad": {
+                        "label": "Entidad"
+                    },
+                    "nombreDelProcedimiento": {
+                        "label": "Objeto"
+                    },
+                    "adjudicado": {
+                        "label": "Adjudicado"
+                    },
+                    "valorTotalAdjudicacion": {
+                        "label": "Valor adjudicado",
+                        "format": "number"
+                    },
+                    "nombreDelProveedor": {
+                        "label": "Proveedor ganador"
+                    },
+                    "nitDelProveedorAdjudicado": {
+                        "label": "NIT Proveedor"
+                    },
+                    "urlProceso": {
+                        "label": "Enlace",
+                        "format": "link"
+                    }
+                }
+            }
+        },
+        "cronograma": {
+            "title": "Cronograma y Fechas",
+            "transformation": {
+                "fields": [
+                    "entidad",
+                    "nombreDelProcedimiento",
+                    "fechaDePublicacionDel",
+                    "fechaDeRecepcionDe",
+                    "fechaDeAperturaDeRespuesta",
+                    "fechaAdjudicacion",
+                    "urlProceso"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "entidad": {
+                        "label": "Entidad"
+                    },
+                    "nombreDelProcedimiento": {
+                        "label": "Objeto"
+                    },
+                    "fechaDePublicacionDel": {
+                        "label": "Publicación",
+                        "format": "date"
+                    },
+                    "fechaDeRecepcionDe": {
+                        "label": "Límite ofertas",
+                        "format": "date"
+                    },
+                    "fechaDeAperturaDeRespuesta": {
+                        "label": "Apertura ofertas",
+                        "format": "date"
+                    },
+                    "fechaAdjudicacion": {
+                        "label": "Fecha adjudicación",
+                        "format": "date"
+                    },
+                    "urlProceso": {
+                        "label": "Enlace",
+                        "format": "link"
+                    }
+                }
+            }
+        },
+        "economia": {
+            "title": "Economía y Modalidad",
+            "transformation": {
+                "fields": [
+                    "entidad",
+                    "nombreDelProcedimiento",
+                    "modalidadDeContratacion",
+                    "tipoDeContrato",
+                    "duracion",
+                    "unidadDeDuracion",
+                    "precioBase"
+                ]
+            },
+            "display": {
+                "component": "table",
+                "properties": {
+                    "entidad": {
+                        "label": "Entidad"
+                    },
+                    "nombreDelProcedimiento": {
+                        "label": "Objeto"
+                    },
+                    "modalidadDeContratacion": {
+                        "label": "Modalidad"
+                    },
+                    "tipoDeContrato": {
+                        "label": "Tipo contrato"
+                    },
+                    "duracion": {
+                        "label": "Duración",
+                        "format": "number"
+                    },
+                    "unidadDeDuracion": {
+                        "label": "Unidad"
+                    },
+                    "precioBase": {
+                        "label": "Presupuesto",
+                        "format": "number"
+                    }
                 }
             }
         }

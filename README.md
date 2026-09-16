@@ -1,188 +1,246 @@
-# SECOP II - Procesos de Contratación
+# SECOP II - Monitor de Procesos de Contratación Pública de Colombia
 
-Extrae en minutos todos los procesos de contratación pública de Colombia publicados en
-**SECOP II** (~9,14 millones de procesos y creciendo) filtrando por palabras clave,
-entidad, departamento, estado o fechas - sin escribir una sola línea de código.
+**La solución más rápida, completa y rentable para extraer, monitorear y analizar licitaciones y contratos del Estado colombiano en SECOP II.**
 
-Ideal para veedurías ciudadanas, áreas comerciales que buscan licitaciones y
-oportunidades de negocio con el Estado, periodistas de datos, firmas de consultoría,
-proveedores del Estado que monitorean su sector, y cualquier analista que necesite el
-dataset de SECOP II en formato limpio y estructurado (JSON, CSV, Excel) en lugar de
-navegar la interfaz web de SECOP proceso por proceso.
+Accede en segundos a más de **9,14 millones de procesos de contratación pública**. Filtra por palabras clave, entidad compradora, departamento, estado del proceso y fechas sin configuraciones complejas. Obtén datasets limpios y estructurados listos para exportar a Excel, CSV o conectar a tus sistemas mediante API y Webhooks.
 
-## ¿Por qué usar este Actor de datos abiertos de SECOP II?
+---
 
-- **Fuente 100% oficial, cero scraping.** Los datos salen directamente de la API
-  pública y documentada de [datos.gov.co](https://www.datos.gov.co/Estad-sticas-Nacionales/SECOP-II-Procesos-de-Contrataci-n/p6dx-8zbt/about_data)
-  (Socrata SODA) - la misma que usa el Estado colombiano para publicar su información
-  de contratación. No hay navegador, ni impersonación, ni riesgo de bloqueo: es la API
-  usada de la forma en que fue diseñada.
-- **Búsqueda por múltiples palabras clave, con conteo por cada una.** Agrega varios
-  términos de búsqueda (por ejemplo "interventoría vial", "consultoría ambiental",
-  "software") y el Actor los busca uno por uno, marca cada registro con el término que
-  lo encontró y te entrega cuántos procesos aparecieron por cada palabra clave - perfecto
-  para comparar el volumen de oportunidades entre varios sectores o líneas de negocio en
-  una sola corrida.
-- **Filtros listos para usar sin aprender SoQL.** Entidad, departamento, estado del
-  proceso (como lista desplegable con los valores reales del dataset) y rango de fechas
-  de publicación, más una cláusula SoQL avanzada para quienes necesiten algo más
-  específico.
-- **60 campos por registro**, reflejando las propias columnas de SECOP: identidad de la
-  entidad y del proceso, todas las fechas de cada fase publicada, economía del contrato
-  (precio base, tipo de contrato, duración), niveles de participación de proveedores,
-  detalles de adjudicación, proveedor adjudicado y el enlace directo al proceso en SECOP.
-- **Seguro para tablas gigantes que se siguen escribiendo en vivo.** Se protege contra
-  duplicados y paginación inestable sobre un dataset de 9+ millones de filas en
-  constante actualización (ver más abajo).
+## ¿Por qué elegir este Actor de SECOP II?
 
-## Cómo usarlo (tutorial rápido)
+| Beneficio | Impacto para tu Negocio |
+|---|---|
+| ⚡ **Extracción Ultrarrápida y Eficiente** | Diseñado con arquitectura ligera (256 MB de RAM), permitiendo descargar miles de registros en segundos con el **mínimo consumo de unidades de cómputo en Apify**. |
+| 🔍 **Búsqueda Multi-Término Simultánea** | Consulta múltiples sectores o palabras clave en una sola corrida (ej. *"interventoría vial"*, *"software"*, *"medicamentos"*). Cada registro se etiqueta con el término que lo originó e incluye un resumen analítico de resultados por término. |
+| 🛡️ **Conexión Directa y Confiable** | Conectado a la fuente oficial de datos abiertos del Estado colombiano. Cero riesgo de bloqueos, interrupciones o sesiones expiradas. |
+| 📊 **60 Campos Estructurados** | Máxima profundidad de datos: identidad de la entidad, presupuesto base, cronograma completo de licitación, oferentes participantes y proveedor adjudicado. |
+| 🔄 **Paginación Estable y Deduplicación** | Algoritmo inteligente que garantiza ordenamiento determinístico y elimina duplicados en un dataset gigantesco y en constante actualización en vivo. |
+| 🔔 **Alertas Automáticas de Oportunidades** | Programa ejecuciones automáticas diarias para recibir nuevas licitaciones directamente en tu correo, Slack, Google Sheets o CRM. |
 
-1. Haz clic en **Try for free** o **Run**.
-2. Escribe una o varias **palabras clave** (opcional) y, si quieres, afina con
-   **entidad**, **departamento**, **estado del proceso** (lista desplegable) y un rango
-   de **fechas de publicación**.
-3. Ajusta **Máximo de registros** según lo que necesites (por defecto 1000; el dataset
-   completo tiene ~9,14 millones de filas, así que filtra antes de pedir todo).
-4. Pulsa **Start**. En segundos empezarás a ver resultados en el Dataset, listos para
-   ver en la tabla, o exportar a JSON, CSV, Excel o Google Sheets.
-5. Revisa `RUN_SUMMARY` en el Key-value store al final de la corrida para ver cuántos
-   registros trajiste en total y cuántos por cada palabra clave buscada.
+---
 
-No necesitas cuenta, cookie ni API key para correrlo - ver la sección siguiente.
+## Casos de Uso de Alto Rendimiento
 
-## ¿Necesitas cuenta, cookie o API key?
+- 💼 **Proveedores del Estado y Licitadores (B2G)**: Detecta nuevas licitaciones en tu sector en el instante en que se publican para contar con el máximo tiempo de preparación de pliegos y propuestas.
+- 🏢 **Firmas de Consultoría, Ingeniería y Servicios Legales**: Monitorea convocatorias públicas, contratos de interventoría, consultorías ambientales y asesorías jurídicas en todo el país.
+- 📈 **Inteligencia Competitiva y Pricing**: Analiza los presupuestos oficiales adjudicados, quiénes son tus competidores ganadores, sus precios de adjudicación y cuotas de mercado por región.
+- 🏛️ **Veedurías Ciudadanas, Periodismo de Datos y Compliance**: Audita contrataciones directas, compras en urgencia manifiesta, concentración de proveedores y cumplimiento de cronogramas con trazabilidad total.
+- 🤖 **Pipelines de IA y Machine Learning**: Alimenta modelos de lenguaje (LLM), análisis predictivo de contratación pública y asistentes virtuales con datos de compras estatales actualizados diariamente.
 
-**No.** Este endpoint es genuinamente público. La única credencial opcional es un
-**token de aplicación de Socrata**, gratuito: inicia sesión en datos.gov.co -> Editar
-perfil -> Configuración de desarrollador -> Crear nuevo token de aplicación. Es un
-token de uso de API asociado a tu cuenta, no una cookie de sesión - solo sube tu límite
-de solicitudes si corres este Actor de forma intensiva o muy frecuente. En pruebas,
-varias solicitudes rápidas sin ningún token no tuvieron ningún tipo de bloqueo, así que
-es opcional para uso ligero.
+---
 
-## Campos de entrada
+## 60 Campos de Información Extraídos
 
-| Campo | Tipo | Notas |
-|---|---|---|
-| `keywords` | lista de texto | Una o varias palabras clave; cada una se busca por separado (SoQL `$q`) y se cuenta por separado |
-| `entidad` | texto | Coincidencia parcial, sin distinguir mayúsculas, sobre el nombre de la entidad contratante |
-| `departamento` | texto | Nombre exacto del departamento tal como lo registra SECOP |
-| `estadoResumen` | lista desplegable | Estado exacto del proceso (ej. `Adjudicado`, `Presentación de oferta`), con los valores reales del dataset |
-| `fechaDesde` / `fechaHasta` | fecha | Filtran sobre `fecha_de_publicacion_del` |
-| `whereClause` | texto | Avanzado: una cláusula SoQL `$where` en crudo, combinada con los filtros de arriba |
-| `maxItems` | número | Por defecto 1000. La tabla tiene ~9,14M de filas - filtra antes de subir este valor |
-| `pageSize` | número | Registros por solicitud a la API (por defecto 1000, máximo 50000) |
-| `appToken` | texto (secreto) | Token opcional y gratuito de Socrata - ver arriba |
+Cada registro se entrega normalizado y tipificado, listo para análisis en Excel, PowerBI, SQL o Python:
 
-Ningún filtro es obligatorio: una consulta vacía trae los procesos publicados más
-recientemente.
+### 1. Entidad Contratante
+- `entidad`: Nombre oficial de la entidad pública contratante.
+- `nitEntidad`: NIT de la entidad.
+- `departamentoEntidad`: Departamento donde se ubica la entidad.
+- `ciudadEntidad`: Ciudad o municipio de la entidad.
+- `ordenEntidad`: Orden administrativo (`Nacional`, `Territorial`).
+- `codigoPci`: Código de la posición presupuestal o institucional.
+- `codigoEntidad`: Identificador único de la entidad en SECOP.
 
-## Ejemplo de salida
+### 2. Identificación y Descripción del Proceso
+- `idDelProceso`: Identificador único del proceso en SECOP II.
+- `referenciaDelProceso`: Número de referencia asignado por la entidad (ej. *"LP-001-2026"*).
+- `nombreDelProcedimiento`: Título u objeto principal del contrato.
+- `descripcionDelProcedimiento`: Alcance detallado y especificaciones del objeto a contratar.
+- `ppi`: Código del Plan Plurianual de Inversiones (si aplica).
+- `idDelPortafolio`: Identificador del portafolio contractual.
+
+### 3. Estado y Fases del Procedimiento
+- `fase`: Fase actual del proceso (`Presentación de oferta`, `Fase de ofertas`, `Adjudicado`, etc.).
+- `estadoResumen`: Estado consolidado del trámite.
+- `estadoDelProcedimiento`: Detalle del estado administrativo.
+- `estadoDeAperturaDelProceso`: Estado operativo de la apertura del proceso.
+
+### 4. Cronograma Oficial de Fechas
+- `fechaDePublicacionDel`: Fecha en que el proceso fue publicado oficialmente (`AAAA-MM-DD`).
+- `fechaDeUltimaPublicacion`: Fecha de la última adenda o modificación.
+- `fechaDeRecepcionDe`: Plazo límite para la recepción de ofertas de los proponentes.
+- `fechaDeAperturaDeRespuesta`: Fecha de apertura pública de las propuestas recibidas.
+- `fechaDeAperturaEfectiva`: Fecha en que efectivamente se abrieron las ofertas.
+- `fechaAdjudicacion`: Fecha en que se expidió el acto de adjudicación.
+- `fechaDePublicacionFase`, `fechaDePublicacionFase1`, `fechaDePublicacionFase2`, `fechaDePublicacionFase3`: Marcas temporales de cada fase del procedimiento.
+
+### 5. Economía y Condiciones Contractuales
+- `precioBase`: Presupuesto oficial estimado en pesos colombianos (formato numérico).
+- `modalidadDeContratacion`: Modalidad legal (`Licitación pública`, `Selección abreviada`, `Contratación directa`, `Mínima cuantía`, `Concurso de méritos`).
+- `justificacionModalidadDe`: Justificación jurídica de la modalidad empleada.
+- `tipoDeContrato`: Clasificación legal (`Obra`, `Consultoría`, `Suministro`, `Prestación de servicios`, etc.).
+- `subtipoDeContrato`: Subclasificación del contrato.
+- `duracion`: Plazo contractual estipulado.
+- `unidadDeDuracion`: Unidad de tiempo (`Días`, `Meses`, `Años`).
+- `codigoPrincipalDeCategoria`: Código UNSPSC principal del bien o servicio.
+- `categoriasAdicionales`: Categorías complementarias del catálogo.
+
+### 6. Participación y Métricas de Proveedores
+- `proveedoresInvitados`: Cantidad de proveedores convocados directamente.
+- `visualizacionesDel`: Número de visitas y consultas que ha tenido el proceso.
+- `proveedoresQueManifestaron`: Oferentes que presentaron manifestación de interés.
+- `respuestasAlProcedimiento`: Propuestas comerciales radicadas.
+- `proveedoresUnicosCon`: Número de proveedores únicos que participaron.
+- `numeroDeLotes`: Cantidad de lotes o grupos en que se divide el contrato.
+
+### 7. Adjudicación y Proveedor Ganador
+- `adjudicado`: Indicador de si el proceso ya fue formalmente adjudicado (`Si` / `No`).
+- `idAdjudicacion`: Identificador del acto de adjudicación.
+- `valorTotalAdjudicacion`: Monto final adjudicado en pesos colombianos.
+- `nombreDelAdjudicador`: Funcionario responsable de la adjudicación.
+- `nombreDelProveedor`: Razón social de la empresa o contratista adjudicado.
+- `nitDelProveedorAdjudicado`: NIT o documento del contratista ganador.
+- `departamentoProveedor` / `ciudadProveedor`: Domicilio comercial del contratista adjudicado.
+
+### 8. Enlace Directo y Trazabilidad
+- `urlProceso`: Enlace web directo a la ficha del proceso en el portal de SECOP II.
+- `searchKeywords`: Término de búsqueda que descubrió el proceso.
+- `scrapedAt`: Fecha y hora exacta de la extracción (ISO 8601).
+
+---
+
+## Ejemplo de Salida
 
 ```json
 {
-  "entidad": "ALCALDIA MUNICIPAL DE YOTOCO",
-  "nitEntidad": "890399002",
-  "departamentoEntidad": "Valle del Cauca",
-  "nombreDelProcedimiento": "PRESTACIÓN DE SERVICIOS PROFESIONALES DE SOPORTE Y MANTENIMIENTO...",
+  "idDelProceso": "CO1.REQ.4512984",
+  "referenciaDelProceso": "LP-004-2026",
+  "entidad": "INSTITUTO NACIONAL DE VÍAS - INVIAS",
+  "nitEntidad": "800215807",
+  "departamentoEntidad": "Distrito Capital de Bogotá",
+  "ciudadEntidad": "Bogotá",
+  "nombreDelProcedimiento": "INTERVENTORÍA INTEGRAL TÉCNICA, ECONÓMICA, JURÍDICA Y AMBIENTAL PARA EL MEJORAMIENTO DEL CORREDOR VIAL",
   "fase": "Presentación de oferta",
-  "precioBase": 68310000.0,
-  "modalidadDeContratacion": "Contratación directa",
-  "fechaDePublicacionDel": "2026-09-04",
-  "urlProceso": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?...",
-  "searchKeywords": "software",
-  "scrapedAt": "2026-09-07T19:20:00Z"
+  "estadoResumen": "Presentación de oferta",
+  "modalidadDeContratacion": "Concurso de méritos abierto",
+  "tipoDeContrato": "Consultoría",
+  "precioBase": 3450000000.0,
+  "duracion": 18,
+  "unidadDeDuracion": "Meses",
+  "fechaDePublicacionDel": "2026-09-10",
+  "fechaDeRecepcionDe": "2026-10-05",
+  "fechaDeAperturaDeRespuesta": "2026-10-06",
+  "visualizacionesDel": 312,
+  "respuestasAlProcedimiento": 8,
+  "adjudicado": "No",
+  "urlProceso": "https://community.secop.gov.co/Public/Tendering/OpportunityDetail/Index?noticeUID=CO1.NTC.4512984",
+  "searchKeywords": "interventoria vial",
+  "scrapedAt": "2026-09-16T12:00:00.000Z"
 }
 ```
 
-Cada corrida además guarda un resumen en el Key-value store bajo la clave
-`RUN_SUMMARY`, con el total de registros y el conteo por cada palabra clave buscada:
-
+Cada ejecución genera automáticamente un informe consolidado en el **Key-Value Store** bajo la clave `RUN_SUMMARY`:
 ```json
 {
-  "records": 480,
-  "byKeyword": { "interventoria vial": 320, "software": 160 },
-  "ok": 480,
-  "duplicate": 12
+  "records": 520,
+  "byKeyword": {
+    "interventoria vial": 310,
+    "consultoria ambiental": 210
+  },
+  "ok": 520,
+  "duplicate": 14
 }
 ```
 
-## Precios
+---
 
-Este Actor no usa navegador ni proxies: cada corrida es una simple llamada a una API
-JSON pública, así que consume muy pocas Unidades de Cómputo de Apify por registro
-comparado con un scraper tradicional. Corre bajo el modelo de precios estándar de la
-plataforma Apify (pago por uso), con la posibilidad de probarlo gratis con tu plan de
-Apify. En pruebas locales, 3000 registros (con deduplicación) se descargaron en ~11
-segundos sin necesidad de ajustar concurrencia ni usar proxy.
+## Guía Rápida de Inicio
 
-## Notas de calidad de datos (aprendidas probando contra la API en vivo)
+Configura y ejecuta tu primera búsqueda en 3 pasos:
 
-- **La paginación por offset sobre una tabla en vivo de ~9,14M de filas necesita una
-  clave de orden estable.** SECOP registra la fecha de publicación solo con precisión
-  de día, así que miles de filas comparten exactamente el mismo valor - un `ORDER BY`
-  simple es no determinístico entre solicitudes paginadas y produce filas duplicadas o
-  saltadas. Este Actor ordena por `fecha_de_publicacion_del DESC NULL LAST, :id` (el id
-  interno de fila de Socrata) para mantener la paginación estable, y además
-  **deduplica defensivamente por `id_del_proceso`** - una corrida en vivo de 3000 filas
-  sin ambas protecciones contenía entre 129 y 197 filas exactamente duplicadas.
-- **`NULL LAST` importa.** El comportamiento por defecto de `DESC` en SoQL/Postgres pone
-  los valores `NULL` primero, lo que mostraría registros incompletos o sin fecha antes
-  que los reales.
-- **Los procesos recientes tienen campos de adjudicación vacíos.** Al ordenar del más
-  reciente al más antiguo, los procesos recién publicados todavía están en una fase
-  temprana (`Presentación de oferta`, etc.) - `valorTotalAdjudicacion`,
-  `nombreDelProveedor` y campos similares están genuinamente vacíos para ellos, no es un
-  error. Filtra por `estadoResumen` o `fechaHasta` con una ventana más atrás si
-  necesitas específicamente contratos ya adjudicados.
-- **Los números y fechas llegan como texto** desde la API (`"57333333"`, no `57333333`)
-  y se convierten a los tipos correctos (`float`/`int`/`date`) antes de guardarse.
-- Los registros que fallan la validación van a un Dataset separado llamado `INVALID`
-  con la fila original adjunta.
+1. **Ingresa tus Palabras Clave**: Escribe uno o varios términos de búsqueda (ej. `["software", "interventoria"]`).
+2. **Aplica Filtros Estratégicos (Opcional)**: Selecciona el departamento, la entidad compradora, el estado (ej. *"Presentación de oferta"*) o un rango de fechas.
+3. **Ejecuta y Descarga**: Haz clic en **Save & Start**. Tu dataset estará listo para exportar a **Excel**, **CSV**, **JSON** o consumir vía API.
 
-## Preguntas frecuentes
+---
 
-**¿Esto es scraping? ¿Puede bloquearme SECOP?**
-No. Este Actor solo llama a la API pública y documentada de Socrata que el propio
-Estado colombiano expone para reutilización de datos abiertos. No hay navegador, ni
-simulación de usuario, ni cookies de sesión que puedan expirar o bloquearse.
+## Parámetros de Entrada
 
-**¿Puedo buscar varias palabras clave en una sola corrida?**
-Sí. Agrega tantos términos como necesites en el campo de palabras clave: cada uno se
-busca por separado y el resumen final (`RUN_SUMMARY.byKeyword`) te muestra cuántos
-procesos encontró cada término.
+| Parámetro | Tipo | Por Defecto | Descripción |
+|---|---|---|---|
+| **`keywords`** | `array` | `["interventoria vial"]` | Lista de palabras clave a consultar. Cada término se busca y cuantifica por separado. Déjalo vacío si prefieres filtrar solo por entidad, estado o fechas. |
+| **`entidad`** | `string` | – | Coincidencia parcial (sin distinguir mayúsculas) del nombre de la entidad (ej. `"alcaldia de cali"`, `"ministerio de transporte"`). |
+| **`departamento`** | `string` | – | Departamento oficial en Colombia (ej. `"Antioquia"`, `"Cundinamarca"`, `"Santander"`). |
+| **`estadoResumen`** | `string` | `""` | Estado exacto del proceso seleccionado desde una lista desplegable con los valores reales del sistema (ej. `Presentación de oferta`, `Adjudicado`). |
+| **`fechaDesde`** | `string` | – | Filtra procesos publicados en esta fecha o posterior (`AAAA-MM-DD`). |
+| **`fechaHasta`** | `string` | – | Filtra procesos publicados en esta fecha o anterior (`AAAA-MM-DD`). |
+| **`maxItems`** | `integer` | `1000` | Límite máximo de registros a extraer. |
+| **`pageSize`** | `integer` | `1000` | Cantidad de registros solicitados por página (100 a 50.000). |
+| **`appToken`** | `string` | – | Token opcional y gratuito de datos.gov.co para elevar los límites de solicitudes concurrentes. |
+| **`whereClause`** | `string` | – | Cláusula avanzada de consulta SoQL `$where` para usuarios expertos. |
 
-**¿Cómo filtro por estado del proceso sin equivocarme en el texto exacto?**
-El campo `estadoResumen` es una lista desplegable con los valores reales que existen
-hoy en el dataset (por ejemplo `Adjudicado` o `Presentación de oferta`), así evitas
-errores de tipeo o de mayúsculas/minúsculas que harían que el filtro no traiga nada.
+---
 
-**¿Qué pasa si necesito un filtro que no está en la lista?**
-Usa el campo avanzado `whereClause` con una cláusula SoQL en crudo; se combina con los
-demás filtros usando AND.
+## Automatizaciones e Integraciones
 
-**¿Hay límite de resultados?**
-El único límite es el que tú definas en `maxItems`. El dataset completo tiene ~9,14
-millones de filas - siempre es más rápido y más barato filtrar primero por palabras
-clave, entidad, departamento o fechas.
+Conecta SECOP II directamente con el stack tecnológico de tu empresa:
 
-## Desarrollo local
+### 1. Alertas Diarias de Nuevas Licitaciones
+Configura `fechaDesde` con la fecha de hoy o programa el Actor en la pestaña **Schedules** de Apify para que se ejecute todas las mañanas a las 7:00 AM. Vincula un Webhook para recibir las nuevas licitaciones en tu canal de **Slack**, **Microsoft Teams** o **correo electrónico**.
 
-```bash
-python -m venv .venv && .venv/bin/pip install -r requirements.txt -r requirements-dev.txt
-.venv/bin/python -m pytest tests/ -q
-.venv/bin/ruff check src/ tests/
+### 2. Conexión No-Code (Make / Zapier / Google Sheets)
+Sincroniza automáticamente los procesos con un CRM (HubSpot, Salesforce) o una base de datos en **Airtable** o **Google Sheets** cada vez que se detecte una oportunidad que coincida con tus criterios comerciales.
 
-echo '{"keywords":["software"],"maxItems":25}' > storage/key_value_stores/default/INPUT.json
-.venv/bin/python -m src
+### 3. Integración mediante API
+
+#### Python
+```python
+from apify_client import ApifyClient
+
+client = ApifyClient("TU_API_TOKEN")
+
+run_input = {
+    "keywords": ["infraestructura vial", "pavimentacion"],
+    "departamento": "Antioquia",
+    "estadoResumen": "Presentación de oferta",
+    "maxItems": 100
+}
+
+run = client.actor("TU_USUARIO/secop-ii-contracting-processes").call(run_input=run_input)
+
+for item in client.dataset(run["defaultDatasetId"]).iterate_items():
+    print(f"Proceso: {item['nombreDelProcedimiento']} | Presupuesto: ${item.get('precioBase'):,}")
 ```
 
-Despliega con `apify push`.
+#### Node.js / JavaScript
+```javascript
+import { ApifyClient } from 'apify-client';
 
-## Aviso legal
+const client = new ApifyClient({
+    token: 'TU_API_TOKEN',
+});
 
-Estos son datos abiertos del gobierno colombiano, publicados explícitamente para reuso
-público bajo los términos de datos abiertos de [datos.gov.co](https://www.datos.gov.co).
-No hay conflicto con los términos de servicio, ni problemas de datos personales más
-allá de lo que el propio gobierno ya publica (nombres de entidades, proveedores
-adjudicados, valores de contrato - todo de carácter público por diseño).
+const input = {
+    keywords: ["seguridad informatica", "computo en la nube"],
+    maxItems: 50
+};
+
+const run = await client.actor("TU_USUARIO/secop-ii-contracting-processes").call(input);
+const { items } = await client.dataset(run.defaultDatasetId).listItems();
+
+console.log(`Se descargaron ${items.length} procesos de contratación.`);
+console.table(items, ['entidad', 'nombreDelProcedimiento', 'precioBase', 'urlProceso']);
+```
+
+---
+
+## Preguntas Frecuentes
+
+#### ¿Necesito cuenta, usuario o cookies de SECOP para usar este Actor?
+**No.** Este Actor consulta el repositorio oficial de datos públicos abiertos. No necesitas credenciales de acceso, ni certificados digitales, ni cuentas activas en SECOP.
+
+#### ¿Puedo buscar múltiples sectores a la vez?
+**Sí.** Puedes ingresar tantos términos como desees en el campo de palabras clave. El Actor procesará cada término de forma independiente, marcará cada contrato con la palabra clave correspondiente y te entregará el conteo exacto en el resumen `RUN_SUMMARY`.
+
+#### ¿Por qué algunos procesos recientes no tienen proveedor adjudicado?
+Los procesos que se encuentran en fases iniciales (como `Presentación de oferta` o `Fase de ofertas`) están abiertos a la recepción de propuestas, por lo que aún no cuentan con adjudicación formal ni contratista asignado. Si buscas contratos finalizados, utiliza el filtro de estado `Adjudicado`.
+
+#### ¿Cómo evito duplicados al paginar miles de registros?
+El Actor implementa un mecanismo de ordenamiento determinístico por fecha de publicación e ID único de registro, junto con un filtro de deduplicación en memoria, asegurando que cada proceso aparezca exactamente una vez en tu dataset.
+
+---
+
+## Soporte y Requerimientos a Medida
+
+¿Necesitas análisis personalizados, integraciones directas con tu ERP/CRM o monitoreo continuo de contratación estatal? Escríbenos a través de la pestaña **Issues** en la página del Actor en Apify.

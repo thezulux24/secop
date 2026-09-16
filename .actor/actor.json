@@ -2,16 +2,19 @@
     "actorSpecification": 1,
     "name": "secop-ii-contracting-processes",
     "title": "SECOP II - Procesos de Contratación",
-    "description": "Consulta el dataset de contratación pública de Colombia (SECOP II) a través de su API oficial de Socrata. Filtra por palabras clave, entidad, departamento, fechas o una cláusula SoQL en crudo - sin scraping de por medio.",
+    "description": "Extrae y monitorea procesos de contratación pública de Colombia (SECOP II). Filtra por palabras clave, entidad, departamento, estado y fechas. Rápido, estructurado y sin bloqueos.",
     "version": "0.0",
     "buildTag": "latest",
     "dockerfile": "./Dockerfile",
     "input": "./input_schema.json",
-    "storages": { "dataset": "./dataset_schema.json" },
+    "storages": {
+        "dataset": "./dataset_schema.json"
+    },
     "minMemoryMbytes": 256,
     "maxMemoryMbytes": 1024,
     "defaultRunOptions": {
         "memoryMbytes": 256,
         "timeoutSecs": 0
-    }
+    },
+    "output": "./output_schema.json"
 }
